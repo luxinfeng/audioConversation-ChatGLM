@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Voice Chat</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      h1 {
+        font-size: 32px;
+        margin-bottom: 30px;
+      }
+
+      button {
+        background-color: #0077ff;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 18px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+
+      button:hover {
+        background-color: #0060c0;
+      }
+
+      button[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      audio {
+        width: 100%;
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Voice Chat</h1>
+      <button id="record-button" onclick="toggleRecording()">Record</button>
+      <button id="stop-button" onclick="stopRecording()" disabled>Stop</button>
+      <audio id="audio-player"></audio>
+    </div>
+  <script>
+    const API_URL = 'http://192.168.28.64:7060/chat';
+
+    let mediaRecorder;
+
+    // 创建一个MediaRecorder对象用于录制语音
+    async function initRecorder() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.addEventListener("dataavailable", async (event) => {
+          const blob = event.data;
+          const formData = new FormData();
+          formData.append("audio_file", blob, "audio.wav");
+
+          try {
+            const response = await fetch(API_URL, {
+              method: "POST",
+              body: formData,
+              headers: {
+                'Access-Control-Allow-Origin': '*'
+              }
+            });
+
+            if (response.ok) {
+              const blob = await response.blob();
+              const url = URL.createObjectURL(blob);
+              
+              const audioPlayer = new Audio();
+              audioPlayer.src = url;
+              audioPlayer.play();
+            } else {
+              console.error("Error sending message:", response.statusText);
+            }
+          } catch (error) {
+            console.error("Error sending message:", error);
+          }
+        });
+      } catch (error) {
+        console.error("Failed to initialize media recorder:", error);
+      }
+    }
+
+    // 切换录制状态
+    function toggleRecording() {
+      if (mediaRecorder.state === "inactive") {
+        mediaRecorder.start();
+        document.getElementById("record-button").disabled = true;
+        document.getElementById("stop-button").disabled = false;
+      } else {
+        mediaRecorder.stop();
+        document.getElementById("record-button").disabled = false;
+        document.getElementById("stop-button").disabled = true;
+      }
+    }
+
+    // 停止录制
+    function stopRecording() {
+      mediaRecorder.stop();
+      document.getElementById("record-button").disabled = false;
+      document.getElementById("stop-button").disabled = true;
+    }
+
+    // 初始化录音功能
+    initRecorder();
+  </script>
+</body>
+</html>

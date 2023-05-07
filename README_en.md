@@ -131,9 +131,9 @@ python cli_demo.py
 The command runs an interactive program in the shell. Type your instruction in the shell and hit enter to generate the response. Type `clear` to clear the dialogue history and `stop` to terminate the program.
 
 ## API Deployment
-First install the additional dependency `pip install fastapi uvicorn`. The run [api.py](api.py) in the repo.
+First install the additional dependency `pip install fastapi uvicorn`. The run [api.py](model_api.py) in the repo.
 ```shell
-python api.py
+python model_api.py
 ```
 By default the api runs at the`8000`port of the local machine. You can call the API via 
 ```shell

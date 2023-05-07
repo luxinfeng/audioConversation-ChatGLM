@@ -137,9 +137,9 @@ python cli_demo.py
 程序会在命令行中进行交互式的对话，在命令行中输入指示并回车即可生成回复，输入 `clear` 可以清空对话历史，输入 `stop` 终止程序。
 
 ### API部署
-首先需要安装额外的依赖 `pip install fastapi uvicorn`，然后运行仓库中的 [api.py](api.py)：
+首先需要安装额外的依赖 `pip install fastapi uvicorn`，然后运行仓库中的 [api.py](model_api.py)：
 ```shell
-python api.py
+python model_api.py
 ```
 默认部署在本地的 8000 端口，通过 POST 方法进行调用
 ```shell

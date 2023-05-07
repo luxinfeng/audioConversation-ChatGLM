@@ -6,3 +6,7 @@ gradio
 mdtex2html
 sentencepiece
 accelerate
+paddlepaddle
+uvicorn
+requests
+fastapi
