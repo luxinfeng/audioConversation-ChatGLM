@@ -35,7 +35,8 @@ model = AutoModel.from_pretrained("your local path", trust_remote_code=True).hal
 ### 本地启动
 在Linux环境下运行start.sh脚本即可，然后使用chrome浏览器或者MicroSoft EDGE浏览器打开web_index.html，给予语音权限，即可开始对话。
 
-
+### 未来规划
+当前项目并不完善，前端页面很简陋，后续会优化页面展示以及功能，包括对话历史等。同时，也会增加其他模型的接入（主要是各类小模型），最终希望能够在不使用GPU或者使用低性能GPU的情况下依旧能够实现流畅对话的能力。
 
 ## 协议
 
